@@ -1,24 +1,72 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using NAudio.Wave.SampleProviders;
 
 namespace SynthTest.Audio
 {
-    public class VcoModule : ISignalSource
+    public class VcoModule : ISignalSource, INotifyPropertyChanged
     {
+        #region PropertyChanged Implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
         private float _phase;
-        public float Frequency { get; set; } = 440f;
-        public SignalGeneratorType Type { get; set; } = SignalGeneratorType.Sin;
+        private LinearRamp _frequencyRamp;
+        private float _frequency = 440f;
+        public float Frequency
+        {
+            get => _frequency;
+            set
+            {
+                if (_frequency != value)
+                {
+                    _frequency = value;
+                    //Ramp va viser cette new value progressivement
+                    _frequencyRamp.Value = _frequency;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        private SignalGeneratorType _type = SignalGeneratorType.Sin;
+        public SignalGeneratorType Type
+        {
+            get => _type;
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public VcoModule()
+        {
+            // On initialise le Ramp avec une valeur par défaut (44100Hz standard)
+            // On pourra le mettre à jour si le sampleRate change vraiment
+            _frequencyRamp = new LinearRamp(44100, 0.05f); // 0.05s de lissage
+            _frequencyRamp.Value = _frequency;
+        }
 
         public void Generate(float[] buffer, int count, int sampleRate)
         {
             for (int i = 0; i < count; i++)
             {
+                // A CHAQUE SAMPLE, on demande la prochaine petite étape de fréquence
+                float smoothedFreq = _frequencyRamp.Next();
+
                 float sampleValue = 0f;
 
                 // En fonction du type de signal, on calcule la valeur du sample NOUS MEME pour avoir un vrai controle de voltage.
@@ -57,7 +105,7 @@ namespace SynthTest.Audio
                 buffer[i] = sampleValue;
 
                 // Avancement de la phase
-                _phase += (float)(2.0 * Math.PI * Frequency / sampleRate);
+                _phase += (float)(2.0 * Math.PI * smoothedFreq / sampleRate);
 
                 // On reste entre 0 et 2PI (pour pas overflow)
                 if (_phase > 2.0 * Math.PI)

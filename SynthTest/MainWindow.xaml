@@ -25,10 +25,14 @@
             <StackPanel>
                 <TextBlock Text="VCO 1" Foreground="Black" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-                <TextBlock Text="FREQUENCE (Hz)" Foreground="White" FontSize="10"/>
-                <Slider Minimum="20" Maximum="2000" Value="{Binding Vco.Frequency}" Margin="0,5,0,15"/>
+                <TextBlock Text="FREQUENCE (Hz)" Foreground="Black" FontSize="10"/>
 
-                <TextBlock Text="FORME D'ONDE" Foreground="White" FontSize="10"/>
+                <Slider Minimum="20" Maximum="2000" 
+            Value="{Binding Vco.Frequency, UpdateSourceTrigger=PropertyChanged}" 
+            Margin="0,5,0,15"/>
+
+                <TextBlock Text="FORME D'ONDE" Foreground="Black" FontSize="10"/>
+
                 <ComboBox SelectedValue="{Binding Vco.Type}" Margin="0,5">
                     <audio:SignalGeneratorType>Sin</audio:SignalGeneratorType>
                     <audio:SignalGeneratorType>Square</audio:SignalGeneratorType>
