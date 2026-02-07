@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SynthTest.Audio
+namespace SynthTest.Core.Dsp.Synthesis
 {
     public class LinearRamp
     {
