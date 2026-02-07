@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 
 namespace SynthTest.Audio
 {
-    public class Cable : ISignalSource
+    public class Cable
     {
-        // La source branchee a l'autre bout du cable
-        public ISignalSource Source { get; set; }
+        // Le cable deviens débile et ne fait que relier AudioInput et AudioOutput
+        public AudioOutput Source { get; }
+        public AudioInput Destination { get; }
 
-        public void Generate(float[] buffer, int count, int sampleRate)
+        public Cable(AudioOutput source, AudioInput destination)
         {
-            if (Source != null)
+            Source = source;
+            Destination = destination;
+
+            // On branche "physiquement"
+            Destination.ConnectedOutput = Source;
+        }
+
+        public void Disconnect()
+        {
+            if (Destination != null)
             {
-                // Si branché, on tire le signal de la source
-                Source.Generate(buffer, count, sampleRate);
-            }
-            else
-            {
-                // Cable en l'air = RIENNN
-                Array.Clear(buffer, 0, count);
+                Destination.ConnectedOutput = null;
             }
         }
     }

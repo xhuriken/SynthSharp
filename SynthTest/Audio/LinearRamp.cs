@@ -29,10 +29,10 @@ namespace SynthTest.Audio
                 if (_targetValue == value) return;
 
                 _targetValue = value;
-                // Combien dechantillons sont necessaires pour atteindre la value cible
+                // Combien d'echantillons sont necessaires pour atteindre la value cible
                 _samplesRemaining = (int)(_sampleRate * _rampTimeSeconds);
 
-                // Calcul de l'increment par echantillon pour atteindre la value cible en temps voulu
+                // Calcul de l'increment par d'echantillon pour atteindre la value cible en temps voulu
                 if (_samplesRemaining > 0)
                 {
                     _increment = (_targetValue - _currentValue) / _samplesRemaining;

@@ -11,7 +11,7 @@ namespace SynthTest.Audio
     // Tout module (VCO, LFO, Filtre, tout le tralala) implémente ceci imo
     public interface ISignalSource
     {
-        // Method pour remplir un buffer de "tensions" (float)
-        void Generate(float[] buffer, int count, int sampleRate);
+        // Method pour remplir un buffer de "tensions" (float de volt)
+        void Generate(float[] buffer, int offset, int count, int sampleRate);
     }
 }

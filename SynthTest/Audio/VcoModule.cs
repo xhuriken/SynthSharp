@@ -1,6 +1,5 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SynthTest.Audio
 {
-    public class VcoModule : ISignalSource, INotifyPropertyChanged
+    public class VcoModule : INotifyPropertyChanged
     {
         #region PropertyChanged Implementation
         public event PropertyChangedEventHandler PropertyChanged;
@@ -24,6 +23,9 @@ namespace SynthTest.Audio
         private float _phase;
         private LinearRamp _frequencyRamp;
         private float _frequency = 440f;
+
+        // Le VCO ne possède qu'une seule sortie.
+        public AudioOutput Output { get; }
         public float Frequency
         {
             get => _frequency;
@@ -52,15 +54,19 @@ namespace SynthTest.Audio
             }
         }
 
-        public VcoModule()
+        public VcoModule(float initFrequency = 440f)
         {
+
             // On initialise le Ramp avec une valeur par défaut (44100Hz standard)
             // On pourra le mettre à jour si le sampleRate change vraiment
             _frequencyRamp = new LinearRamp(44100, 0.05f); // 0.05s de lissage
             _frequencyRamp.Value = _frequency;
+            Frequency = initFrequency;
+
+            Output = new AudioOutput(GenerateInternal);
         }
 
-        public void Generate(float[] buffer, int count, int sampleRate)
+        private void GenerateInternal(float[] buffer, int offset, int count, int sampleRate)
         {
             for (int i = 0; i < count; i++)
             {
@@ -102,7 +108,7 @@ namespace SynthTest.Audio
                         break;
                 }
 
-                buffer[i] = sampleValue;
+                buffer[offset + i] = sampleValue;
 
                 // Avancement de la phase
                 _phase += (float)(2.0 * Math.PI * smoothedFreq / sampleRate);

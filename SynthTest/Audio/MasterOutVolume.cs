@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -26,7 +27,7 @@ namespace SynthTest.Audio
 
         // Le module branche (le VCO ou un Mixer quoi)
         // Ici on attend un CABLE ou un MODULE direct
-        public ISignalSource MainInput { get; set; }
+        public AudioInput Input { get; } = new AudioInput();
 
         public WaveFormat WaveFormat { get; } = WaveFormat.CreateIeeeFloatWaveFormat(44100, 1);
         
@@ -55,7 +56,7 @@ namespace SynthTest.Audio
 
         public MasterOutModule()
         {
-            // POINT IMPORTANT ! On gère la lattence de 
+            // POINT IMPORTANT ! On gère la latence de Naudio
             _outputDevice = new WaveOutEvent { DesiredLatency = 100 };
             _outputDevice.Init(this); // On demande a NAudio de lire ce module
 
@@ -63,7 +64,6 @@ namespace SynthTest.Audio
             _volumeRamp.Value = _volume;
         }
 
-        // Appel automatiquement par NAudio (j'ai pas trop compris comment et pourquoi dans la doc)
         /// <summary>
         /// 
         /// </summary>
@@ -73,25 +73,27 @@ namespace SynthTest.Audio
         /// <returns></returns>
         public int Read(float[] buffer, int offset, int count)
         {
-            //Array.Clear(buffer, offset, count);
+            Array.Clear(buffer, offset, count);
 
-            //if (IsMuted || MainInput == null)
-            //{
-            //    return count;
-            //}
+            //Trace.WriteLine($"[MasterOut] Read called with count : {count.ToString()}");
+            //Trace.WriteLine($"[MasterOut] Buffer Read length     : {buffer.Length.ToString()}");
+            //Trace.WriteLine($"[MasterOut] Offset: {offset} | Count: {count}");
+            if (IsMuted || Input == null) return count;
 
             // On demande au VCO de remplir le buffer
-            MainInput.Generate(buffer, count, WaveFormat.SampleRate);
+            Input.Generate(buffer, offset, count, WaveFormat.SampleRate);
 
             // On applique le volume master
 
-            if(Volume == 1f) return count; // Si le volume est à 1, on peut skip la multiplication pour gagner du temps en saaaaaaaah (on met jamais a 1 ça pète les oreils)
+            //if(Volume == 1f) return count; // Si le volume est à 1, on peut skip la multiplication pour gagner du temps en saaaaaaaah (on met jamais a 1 ça pète les oreils)
 
             for (int n = 0; n < count; n++)
             {
                 float smoothedVolume = _volumeRamp.Next();
+                //Trace.WriteLine($"[MasterOut] Sample {n} before volume: {buffer[offset + n].ToString()}");
                 // l'offset est facultatif mais le read le demande de base, j'ai pas encore trouver le cas ou l'offset est different de 0 mais bon
                 buffer[offset + n] *= smoothedVolume; // On * par le volume
+                //Trace.WriteLine($"[MasterOut] Sample {n} after volume: {buffer[offset + n].ToString()}");
             }
 
             //Trace.WriteLine($"we send {count}");
@@ -99,7 +101,7 @@ namespace SynthTest.Audio
             return count;
         }
 
-        // Process de la sortie
+        // Process de la sortieS
         public void Play() => _outputDevice.Play();
         public void Stop() => _outputDevice.Stop();
         public void Dispose() => _outputDevice.Dispose();
