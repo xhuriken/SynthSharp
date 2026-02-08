@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SynthTest.Core.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,27 +13,26 @@ namespace SynthTest.Core.Dsp.Synthesis
         private float _targetValue;
         private float _increment;
         private int _samplesRemaining;
-        private readonly float _sampleRate;
+        // Smoothing time
         private readonly float _rampTimeSeconds;
 
-        public LinearRamp(float sampleRate, float rampTimeSeconds = 0.05f)
+        public LinearRamp(float rampTimeSeconds = 0.05f)
         {
-            _sampleRate = sampleRate;
             _rampTimeSeconds = rampTimeSeconds;
         }
 
         public float Value
         {
-            get => _currentValue;
+            get => _currentValue; // Le DSP lit la valeur courante
             set
             {
                 if (_targetValue == value) return;
 
                 _targetValue = value;
-                // Combien d'echantillons sont necessaires pour atteindre la value cible
-                _samplesRemaining = (int)(_sampleRate * _rampTimeSeconds);
 
-                // Calcul de l'increment par d'echantillon pour atteindre la value cible en temps voulu
+                // SEULE DIFFÉRENCE : On prend le SampleRate du Config global
+                _samplesRemaining = (int)(AudioConfig.SampleRate * _rampTimeSeconds);
+
                 if (_samplesRemaining > 0)
                 {
                     _increment = (_targetValue - _currentValue) / _samplesRemaining;
@@ -45,7 +45,6 @@ namespace SynthTest.Core.Dsp.Synthesis
             }
         }
 
-        // Appel a chaque sample dans le Generate() de ISignalSource
         public float Next()
         {
             if (_samplesRemaining > 0)

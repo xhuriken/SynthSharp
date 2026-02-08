@@ -1,4 +1,5 @@
 ﻿using SynthTest.Core.Abstractions;
+using SynthTest.Core.Dsp.Synthesis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,37 +15,72 @@ namespace SynthTest.Core.Dsp.Processors
         public IAudioNode Input3 { get; set; }
         public IAudioNode Input4 { get; set; }
 
-        public float Vol1 { get; set; } = 1.0f;
-        public float Vol2 { get; set; } = 1.0f;
-        public float Vol3 { get; set; } = 1.0f;
-        public float Vol4 { get; set; } = 1.0f;
+        private LinearRamp _ramp1 = new LinearRamp(0.05f);
+        private LinearRamp _ramp2 = new LinearRamp(0.05f);
+        private LinearRamp _ramp3 = new LinearRamp(0.05f);
+        private LinearRamp _ramp4 = new LinearRamp(0.05f);
+
+        private float _vol1 = 1.0f;
+        private float _vol2 = 1.0f;
+        private float _vol3 = 1.0f;
+        private float _vol4 = 1.0f;
+
+        public float Vol1
+        {
+            get => _vol1;
+            set { _vol1 = value; _ramp1.Value = value; }
+        }
+        public float Vol2
+        {
+            get => _vol2;
+            set { _vol2 = value; _ramp2.Value = value; }
+        }
+        public float Vol3
+        {
+            get => _vol3;
+            set { _vol3 = value; _ramp3.Value = value; }
+        }
+        public float Vol4
+        {
+            get => _vol4;
+            set { _vol4 = value; _ramp4.Value = value; }
+        }
 
         private float[] _mixBuffer;
 
-        public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
+        public MixerNode()
         {
-            //Array.Clear(buffer, offset, count);
-            EnsureBufferCapacity(count);
-
-            // Mix 4 Input one by one
-            MixInput(Input1, Vol1, buffer, offset, count, context);
-            MixInput(Input2, Vol2, buffer, offset, count, context);
-            MixInput(Input3, Vol3, buffer, offset, count, context);
-            MixInput(Input4, Vol4, buffer, offset, count, context);
+            _ramp1.Value = _vol1;
+            _ramp2.Value = _vol2;
+            _ramp3.Value = _vol3;
+            _ramp4.Value = _vol4;
         }
 
-        private void MixInput(IAudioNode input, float volume, float[] outputBuffer, int offset, int count, AudioContext context)
+        public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
         {
-            if (input == null || volume <= 0.001f) return;
+            EnsureBufferCapacity(count);
+            //Array.Clear(buffer, offset, count);
 
-            Array.Clear(_mixBuffer, 0, count);
+            // Mix 4 Input one by one
+            MixInput(Input1, _ramp1, buffer, offset, count, context);
+            MixInput(Input2, _ramp2, buffer, offset, count, context);
+            MixInput(Input3, _ramp3, buffer, offset, count, context);
+            MixInput(Input4, _ramp4, buffer, offset, count, context);
+        }
+
+        private void MixInput(IAudioNode input, LinearRamp volumeRamp, float[] outputBuffer, int offset, int count, AudioContext context)
+        {
+            if (input == null) return;
+
+            //Array.Clear(_mixBuffer, 0, count);
 
             // Get the input signal into the local buffer
             input.ProcessBlock(_mixBuffer, 0, count, context);
 
             for (int i = 0; i < count; i++)
             {
-                outputBuffer[offset + i] += _mixBuffer[i] * volume;
+                float smoothedVolume = volumeRamp.Next();
+                outputBuffer[offset + i] += _mixBuffer[i] * smoothedVolume;
             }
         }
 

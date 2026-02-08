@@ -19,9 +19,10 @@ namespace SynthTest.Core.Dsp.Generators
         public float Frequency
         {
             get => _frequency;
-            set { 
+            set
+            {
                 _frequency = value;
-                _frequencyRamp.Value = value; 
+                _frequencyRamp.Value = value;
             }
         }
 
@@ -30,7 +31,7 @@ namespace SynthTest.Core.Dsp.Generators
 
         public OscillatorNode()
         {
-            _frequencyRamp = new LinearRamp(44100, 0.05f);
+            _frequencyRamp = new LinearRamp(0.05f);
             _frequencyRamp.Value = _frequency;
         }
 

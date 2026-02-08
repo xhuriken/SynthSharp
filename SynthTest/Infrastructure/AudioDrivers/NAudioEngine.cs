@@ -22,6 +22,7 @@ namespace SynthTest.Infrastructure.AudioDrivers
 
         public NAudioEngine(int sampleRate = 44100)
         {
+            AudioConfig.SampleRate = sampleRate;
             _context = new AudioContext { SampleRate = sampleRate };
             WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 1);
 
