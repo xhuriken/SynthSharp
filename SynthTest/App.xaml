@@ -6,12 +6,63 @@
              xmlns:v="clr-namespace:SynthTest.Presentation.Views.Modules"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+        <DataTemplate x:Key="InputPortTemplate">
+            <Border  Padding="3,2,3,2" Margin="1" Background="LightGray" CornerRadius="5">
+                <Grid Background="Transparent" ToolTip="{Binding Name}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Ellipse Grid.Row="1" Width="15" Height="15" 
+                         Fill="LightGray" Stroke="White" StrokeThickness="2"
+                         Tag="{Binding}" 
+                         Cursor="Hand"/>
+                    <Ellipse Grid.Row="1" Width="20" Height="20" 
+                        Fill="Gray" Stroke="#000" StrokeThickness="1"
+                        IsHitTestVisible="False"
+                        Panel.ZIndex="-1"
+                        Cursor="Hand"/>
+
+                    <TextBlock Text="{Binding Name}" Foreground="Black" 
+                   HorizontalAlignment="Center" FontSize="9" Margin="0,2,0,0"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="OutputPortTemplate">
+            <Grid Margin="1" Background="Black" ToolTip="{Binding Name}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Ellipse Grid.Row="1" Width="15" Height="15" 
+                         Fill="LightGray" Stroke="White" StrokeThickness="2"
+                         Tag="{Binding}" 
+                         Cursor="Hand"/>
+                <Ellipse Grid.Row="1" Width="20" Height="20" 
+                        Fill="Gray" Stroke="#000" StrokeThickness="1"
+                        IsHitTestVisible="False"
+                        Panel.ZIndex="-1"
+                        Cursor="Hand"/>
+
+                <TextBlock  Text="{Binding Name}" Foreground="White" 
+                   HorizontalAlignment="Center" FontSize="9" Margin="0,2,0,0"/>
+            </Grid>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:OscillatorViewModel}">
             <v:OscillatorView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vm:MixerViewModel}">
             <v:MixerView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:AudioOutputViewModel}">
+            <v:AudioOutputView />
         </DataTemplate>
     </Application.Resources>
 </Application>

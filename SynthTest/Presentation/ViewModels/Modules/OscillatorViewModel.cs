@@ -1,6 +1,7 @@
 ﻿using SynthTest.Core.Abstractions;
 using SynthTest.Core.Dsp.Generators;
 using SynthTest.Presentation.ViewModels.Base;
+using SynthTest.Presentation.ViewModels.Ports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,15 @@ namespace SynthTest.Presentation.ViewModels.Modules
     public class OscillatorViewModel : ModuleViewModelBase
     {
         private readonly OscillatorNode _node;
+        public override IAudioNode Node => _node;
+        public override string Name => "VCO";
 
         public OscillatorViewModel(OscillatorNode node)
         {
             _node = node;
+
+            Outputs.Add(new OutputPortViewModel("OUT", this, _node));
         }
-
-        public override IAudioNode Node => _node;
-        public override string Name => "VCO";
-
 
         public float Frequency
         {

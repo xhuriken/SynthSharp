@@ -26,7 +26,7 @@ namespace SynthTest.Infrastructure.AudioDrivers
             _context = new AudioContext { SampleRate = sampleRate };
             WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 1);
 
-            _waveOut = new WaveOutEvent { DesiredLatency = 100 };
+            _waveOut = new WaveOutEvent { DesiredLatency = 50 };
             _waveOut.Init(this); // "this" is an ISampleProvider
             // Go to https://github.com/naudio/NAudio/blob/master/Docs/WaveProviders.md
         }

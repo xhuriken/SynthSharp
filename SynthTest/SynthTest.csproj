@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UI\**" />
+    <EmbeddedResource Remove="UI\**" />
+    <None Remove="UI\**" />
+    <Page Remove="UI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
@@ -19,7 +26,6 @@
     <Folder Include="Infrastructure\Midi\" />
     <Folder Include="Presentation\Styles\" />
     <Folder Include="Presentation\Converters\" />
-    <Folder Include="UI\" />
   </ItemGroup>
 
 </Project>

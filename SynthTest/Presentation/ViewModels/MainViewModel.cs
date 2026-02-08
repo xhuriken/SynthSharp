@@ -27,25 +27,15 @@ namespace SynthTest.Presentation.MainViewModel
             // Init the Audio Engine
             _audioEngine = new NAudioEngine();
 
-            // Create the DSP Node (Module)
-            var vco1 = new OscillatorNode { Frequency = 220, Type = OscillatorType.Sin };
-            var vco2 = new OscillatorNode { Frequency = 440, Type = OscillatorType.SawTooth };
-            var mixer = new MixerNode();
+            var masterNode = new AudioOutputNode();
+            var masterVm = new AudioOutputViewModel(masterNode);
 
-            // Manual Cable Management (Hardcoded biatchhhh)
-            // VCO1 -> Mixer Input 1
-            // VCO2 -> Mixer Input 2
-            mixer.Input1 = vco1;
-            mixer.Input2 = vco2;
+            // 2. On l'ajoute au Rack (pour qu'il s'affiche)
+            Rack.AddModule(masterVm);
 
-            // Mixer -> Master Output
-            _audioEngine.InputNode = mixer;
-
-
-            // Create the ViewModel for the interface
-            Rack.AddModule(new OscillatorViewModel(vco1));
-            Rack.AddModule(new OscillatorViewModel(vco2));
-            Rack.AddModule(new MixerViewModel(mixer));
+            // 3. C'EST ICI LE SECRET : On dit à NAudio "Ta source, c'est ce Node là"
+            // Tout le reste du son viendra de ce qui est branché dans ce MasterNode.
+            _audioEngine.InputNode = masterNode;
 
             // Enable our synthesizer dude !
             _audioEngine.Play();

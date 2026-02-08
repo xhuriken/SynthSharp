@@ -1,6 +1,8 @@
 ﻿using SynthTest.Core.Abstractions;
+using SynthTest.Presentation.ViewModels.Ports;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,10 @@ namespace SynthTest.Presentation.ViewModels.Base
         public abstract IAudioNode Node { get; }
 
         public abstract string Name { get; }
+
+        // List for UI of the ports (itemsControl)
+        public ObservableCollection<InputPortViewModel> Inputs { get; } = new();
+        public ObservableCollection<OutputPortViewModel> Outputs { get; } = new();
 
         // later we'll stock his position in the canvas
         // public double X { get; set; }
