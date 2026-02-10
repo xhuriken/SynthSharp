@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SynthTest.Presentation.ViewModels
 {
@@ -36,7 +37,7 @@ namespace SynthTest.Presentation.ViewModels
         // public void RemoveModule(ModuleViewModelBase moduleVm) { blablabla }
 
 
-        public void TryCreateCable(OutputPortViewModel source, InputPortViewModel destination)
+        public void TryCreateCable(OutputPortViewModel source, InputPortViewModel destination, Point p1, Point p2)
         {
             // Right click in void or not in an input
             if (source == null || destination == null) return;
@@ -55,8 +56,13 @@ namespace SynthTest.Presentation.ViewModels
             }
 
             // Create the cable and add it to the list
-            var cable = new CableViewModel(source, destination);
-            Cables.Add(cable);
+            var newCable = new CableViewModel(source, destination)
+            {
+                StartPoint = p1,
+                EndPoint = p2
+            };
+
+            Cables.Add(newCable);
         }
     }
 }

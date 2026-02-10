@@ -59,7 +59,7 @@ namespace SynthTest
                 _sourceDragPort = outputPort; // set it for later
                 _isDragging = true;
 
-                _startPoint = e.GetPosition(this);
+                _startPoint = GetElementCenter(element);
 
                 // Visual.
                 // TODO: STOCK CENTER OF PORT AND USE IT HERE
@@ -101,6 +101,7 @@ namespace SynthTest
                 // HIT TEST
                 // We ask to the visual wpf tree "which things are under us ?"
                 InputPortViewModel foundInput = null;
+                Point targetCenter = mousePos; // at the init we put mouse pos, but we'll update it with output pos
 
                 VisualTreeHelper.HitTest(this, null, new HitTestResultCallback(result =>
                 {
@@ -112,6 +113,7 @@ namespace SynthTest
                         if (elementFounded.DataContext is InputPortViewModel inputVm)
                         {
                             foundInput = inputVm;
+                            targetCenter = GetElementCenter(elementFounded);
                             return HitTestResultBehavior.Stop; // We FUCKING FOUND IT
                         }
                         // We go to the parent
@@ -126,29 +128,29 @@ namespace SynthTest
                 // IS IT AN INPUT ?
                 if (foundInput != null)
                 {
-                    Trace.WriteLine($"[DRAG END] SUCCÈS ! Input trouvé : {foundInput.Name}");
+                    Trace.WriteLine($"[DRAG END] SUCCESS ! Input found : {foundInput.Name}");
 
                     try
                     {
-                        _vm.Rack.TryCreateCable(_sourceDragPort, foundInput);
+                        _vm.Rack.TryCreateCable(_sourceDragPort, foundInput, _startPoint, targetCenter);
 
                         // WE DRAW AN UGLY LINE
                         // (TODO: REPLACE IT WITH A REAL CABLE CONTROL)
-                        DrawPermanentCable(_startPoint, mousePos);
+                        
 
                         StopDragging();
 
                     }
                     catch (Exception ex)
                     {
-                        Trace.WriteLine($"[ERREUR] {ex.Message}");
+                        Trace.WriteLine($"[ERROR SAMER] {ex.Message}");
                         StopDragging();
 
                     }
                 }
                 else
                 {
-                    Trace.WriteLine("[DRAG END] Raté (Rien sous la souris)");
+                    Trace.WriteLine("[DRAG END] Missed (Nothing under the mouse)");
                     StopDragging();
 
                 }
@@ -164,19 +166,11 @@ namespace SynthTest
             Trace.WriteLine("[DRAG] Stopped");
         }
 
-        private void DrawPermanentCable(Point start, Point end)
+
+        private Point GetElementCenter(FrameworkElement element)
         {
-            Line cable = new Line
-            {
-                Stroke = Brushes.Red,
-                StrokeThickness = 3,
-                X1 = start.X,
-                Y1 = start.Y,
-                X2 = end.X,
-                Y2 = end.Y,
-                IsHitTestVisible = false
-            };
-            CableLayer.Children.Add(cable);
+            // Calcule le centre absolu par rapport à la fenêtre
+            return element.TranslatePoint(new Point(element.ActualWidth / 2, element.ActualHeight / 2), this);
         }
     }
 }

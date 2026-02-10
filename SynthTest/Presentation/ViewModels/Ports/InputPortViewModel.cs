@@ -21,7 +21,7 @@ namespace SynthTest.Presentation.ViewModels.Ports
         // Called at PatchCable's creation
         public void Connect(IAudioNode sourceNode)
         {
-            _connectAction(sourceNode); // Ex: Mixer.Input1 = sourceNode
+            _connectAction(sourceNode); // Exampl: Mixer.Input1 = sourceNode
         }
 
         // Called at PatchCable's deletion

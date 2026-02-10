@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SynthTest.Presentation.ViewModels
 {
@@ -12,6 +13,21 @@ namespace SynthTest.Presentation.ViewModels
     {
         public OutputPortViewModel Source { get; }
         public InputPortViewModel Destination { get; }
+
+
+        private Point _startPoint;
+        public Point StartPoint
+        {
+            get => _startPoint;
+            set { _startPoint = value; NotifyPropertyChanged(); }
+        }
+
+        private Point _endPoint;
+        public Point EndPoint
+        {
+            get => _endPoint;
+            set { _endPoint = value; NotifyPropertyChanged(); }
+        }
 
         public CableViewModel(OutputPortViewModel source, InputPortViewModel destination)
         {
