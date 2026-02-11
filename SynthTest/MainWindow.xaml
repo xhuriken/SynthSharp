@@ -23,22 +23,13 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <ItemsControl x:Name="CableLayer" ItemsSource="{Binding Rack.Cables}" IsHitTestVisible="False">
+        <ItemsControl x:Name="CableLayer" ItemsSource="{Binding Rack.Cables}" IsHitTestVisible="True">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Line X1="{Binding StartPoint.X}" 
-                            Y1="{Binding StartPoint.Y}"
-                            X2="{Binding EndPoint.X}" 
-                            Y2="{Binding EndPoint.Y}"
-                            Stroke="Red" 
-                            StrokeThickness="3"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+
         </ItemsControl>
 
         <Canvas x:Name="DragLayer" IsHitTestVisible="False">

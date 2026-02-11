@@ -2,8 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SynthTest"
-             xmlns:vm="clr-namespace:SynthTest.Presentation.ViewModels.Modules"
-             xmlns:v="clr-namespace:SynthTest.Presentation.Views.Modules"
+             xmlns:vm="clr-namespace:SynthTest.Presentation.ViewModels"
+             xmlns:vmM="clr-namespace:SynthTest.Presentation.ViewModels.Modules"
+             xmlns:vM="clr-namespace:SynthTest.Presentation.Views.Modules"
+             xmlns:v="clr-namespace:SynthTest.Presentation.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
@@ -55,16 +57,20 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:OscillatorViewModel}">
-            <v:OscillatorView />
+        <DataTemplate DataType="{x:Type vmM:OscillatorViewModel}">
+            <vM:OscillatorView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:MixerViewModel}">
-            <v:MixerView />
+        <DataTemplate DataType="{x:Type vmM:MixerViewModel}">
+            <vM:MixerView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:AudioOutputViewModel}">
-            <v:AudioOutputView />
+        <DataTemplate DataType="{x:Type vmM:AudioOutputViewModel}">
+            <vM:AudioOutputView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:CableViewModel}">
+            <v:CableView />
         </DataTemplate>
     </Application.Resources>
 </Application>

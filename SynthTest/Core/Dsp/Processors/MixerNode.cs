@@ -72,7 +72,7 @@ namespace SynthTest.Core.Dsp.Processors
         {
             if (input == null) return;
 
-            //Array.Clear(_mixBuffer, 0, count);
+            Array.Clear(_mixBuffer, 0, count);
 
             // Get the input signal into the local buffer
             input.ProcessBlock(_mixBuffer, 0, count, context);

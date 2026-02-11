@@ -36,6 +36,13 @@ namespace SynthTest.Presentation.ViewModels
         // Later we'll need to remove module from the rack, so we can add that method too
         // public void RemoveModule(ModuleViewModelBase moduleVm) { blablabla }
 
+        public void RemoveCable(CableViewModel cable)
+        {
+            if (Cables.Contains(cable))
+            {
+                Cables.Remove(cable);
+            }
+        }
 
         public void TryCreateCable(OutputPortViewModel source, InputPortViewModel destination, Point p1, Point p2)
         {
@@ -48,15 +55,14 @@ namespace SynthTest.Presentation.ViewModels
             // TODO: In the future, we might want to support polyphonic cables.
             // So we should not dispose the existing cable but rather add a new one and let the user choose which one to disconnect if they want to.
 
-            var existing = Cables.FirstOrDefault(c => c.Destination == destination);
-            if (existing != null)
+            var existingCable = Cables.FirstOrDefault(c => c.Destination == destination);
+            if (existingCable != null)
             {
-                existing.Dispose();
-                Cables.Remove(existing);
+                existingCable.Delete();
             }
 
             // Create the cable and add it to the list
-            var newCable = new CableViewModel(source, destination)
+            var newCable = new CableViewModel(source, destination, (c) => RemoveCable(c))
             {
                 StartPoint = p1,
                 EndPoint = p2

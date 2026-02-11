@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SynthTest.Presentation.Views.CableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SynthTest.Presentation.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Disconnect / Delete" Command="{Binding DeleteCommand}"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+
+    <Canvas>
+        <Path Stroke="CornflowerBlue" StrokeThickness="3" IsHitTestVisible="True">
+            <Path.ToolTip>
+                <ToolTip Content="Right Click to Delete"/>
+            </Path.ToolTip>
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="{Binding StartPoint}">
+                        <BezierSegment Point1="{Binding ControlPoint1}" 
+                                       Point2="{Binding ControlPoint2}" 
+                                       Point3="{Binding EndPoint}"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <Path Stroke="Transparent" StrokeThickness="15">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="{Binding StartPoint}">
+                        <BezierSegment Point1="{Binding ControlPoint1}" 
+                                       Point2="{Binding ControlPoint2}" 
+                                       Point3="{Binding EndPoint}"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+        <Ellipse Width="10" Height="10" Fill="CornflowerBlue" Stroke="White" StrokeThickness="1">
+            <Ellipse.RenderTransform>
+                <TranslateTransform X="{Binding StartPoint.X}" Y="{Binding StartPoint.Y}"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Margin>
+                <Thickness Left="-5" Top="-5"/>
+            </Ellipse.Margin>
+        </Ellipse>
+
+        <Ellipse Width="10" Height="10" Fill="CornflowerBlue" Stroke="White" StrokeThickness="1">
+            <Ellipse.RenderTransform>
+                <TranslateTransform X="{Binding EndPoint.X}" Y="{Binding EndPoint.Y}"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Margin>
+                <Thickness Left="-5" Top="-5"/>
+            </Ellipse.Margin>
+        </Ellipse>
+
+    </Canvas>
+
+</UserControl>
