@@ -18,8 +18,6 @@ namespace SynthTest.Infrastructure.AudioDrivers
 
         public WaveFormat WaveFormat { get; }
 
-        private float _TempVolume = 0.2f;
-
         public NAudioEngine(int sampleRate = 44100)
         {
             AudioConfig.SampleRate = sampleRate;
@@ -47,11 +45,6 @@ namespace SynthTest.Infrastructure.AudioDrivers
             else
             {
                 Array.Clear(buffer, offset, count);
-            }
-
-            for (int i = 0; i < count; i++)
-            {
-                buffer[offset + i] *= _TempVolume; // This is temp volume control, we'll add a audio Node later
             }
 
             return count;

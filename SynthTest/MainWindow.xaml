@@ -6,14 +6,13 @@
         MouseLeftButtonUp="OnWindowMouseUp"
         MouseMove="OnWindowMouseMove">
 
-    <Window.Resources>
-        <ContextMenu x:Key="RackContextMenu">
-            <MenuItem Header="Add VCO" Click="OnAddVcoClick"/>
-            <MenuItem Header="Add Mixer" Click="OnAddMixerClick"/>
-        </ContextMenu>
-    </Window.Resources>
-
-    <Grid Background="Transparent" ContextMenu="{StaticResource RackContextMenu}">
+    <Grid Background="Transparent">
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Add VCO" Command="{Binding Rack.AddVcoCommand}"/>
+                <MenuItem Header="Add Mixer" Command="{Binding Rack.AddMixerCommand}"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
 
         <ItemsControl ItemsSource="{Binding Rack.Modules}">
             <ItemsControl.ItemsPanel>

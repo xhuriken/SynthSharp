@@ -14,36 +14,38 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Height="15"/>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Margin="0,6,0,6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Slider Grid.Column="0" Orientation="Vertical" Value="{Binding Vol1}" Maximum="1" HorizontalAlignment="Center"/>
-                <Slider Grid.Column="1" Orientation="Vertical" Value="{Binding Vol2}" Maximum="1" HorizontalAlignment="Center"/>
-                <Slider Grid.Column="2" Orientation="Vertical" Value="{Binding Vol3}" Maximum="1" HorizontalAlignment="Center"/>
-                <Slider Grid.Column="3" Orientation="Vertical" Value="{Binding Vol4}" Maximum="1" HorizontalAlignment="Center"/>
+                <Slider Grid.Column="0" Orientation="Vertical" Value="{Binding Vol1}"   Maximum="1" HorizontalAlignment="Center"/>
+                <Slider Grid.Column="1" Orientation="Vertical" Value="{Binding Vol2}"   Maximum="1" HorizontalAlignment="Center"/>
+                <Slider Grid.Column="2" Orientation="Vertical" Value="{Binding Vol3}"   Maximum="1" HorizontalAlignment="Center"/>
+                <Slider Grid.Column="3" Orientation="Vertical" Value="{Binding Vol4}"   Maximum="1" HorizontalAlignment="Center"/>
+                <Slider Grid.Column="4" Orientation="Vertical" Value="{Binding VolOut}" Maximum="1" HorizontalAlignment="Center"/>
             </Grid>
 
-            <Grid Grid.Row="2" Margin="0,15,0,0">
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <ItemsControl Grid.Column="0" ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource InputPortTemplate}">
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding Inputs}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="1"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding Outputs}" HorizontalAlignment="Center"/>
 
-                <ItemsControl Grid.Column="1" ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource OutputPortTemplate}" HorizontalAlignment="Center"/>
             </Grid>
         </Grid>
         

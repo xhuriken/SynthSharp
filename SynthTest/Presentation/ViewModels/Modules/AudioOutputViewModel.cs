@@ -13,15 +13,23 @@ namespace SynthTest.Presentation.ViewModels.Modules
     public class AudioOutputViewModel : ModuleViewModelBase
     {
         private readonly AudioOutputNode _node;
+        public override IAudioNode Node => _node;
+        public override string Name => "AUDIO OUT";
 
+        public float Vol
+        {
+            get => _node.Vol;
+            set
+            {
+                _node.Vol = value;
+                NotifyPropertyChanged();
+            }
+        }
         public AudioOutputViewModel(AudioOutputNode node)
         {
             _node = node;
 
-            Inputs.Add(new InputPortViewModel("MAIN IN", this, (source) => _node.Input = source));
+            Inputs.Add(new InputPortViewModel("IN", this, (src) => _node.Input.AddSource(src), (src) => _node.Input.RemoveSource(src)));
         }
-
-        public override IAudioNode Node => _node;
-        public override string Name => "AUDIO OUT";
     }
 }

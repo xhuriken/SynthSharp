@@ -5,64 +5,31 @@
              xmlns:vm="clr-namespace:SynthTest.Presentation.ViewModels"
              xmlns:vmM="clr-namespace:SynthTest.Presentation.ViewModels.Modules"
              xmlns:vM="clr-namespace:SynthTest.Presentation.Views.Modules"
+             xmlns:vmP="clr-namespace:SynthTest.Presentation.ViewModels.Ports"
              xmlns:v="clr-namespace:SynthTest.Presentation.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <DataTemplate x:Key="InputPortTemplate">
-            <Border  Padding="3,2,3,2" Margin="1" Background="LightGray" CornerRadius="5">
-                <Grid Background="Transparent" ToolTip="{Binding Name}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <Ellipse Grid.Row="1" Width="15" Height="15" 
-                         Fill="LightGray" Stroke="White" StrokeThickness="2"
-                         Tag="{Binding}" 
-                         Cursor="Hand"/>
-                    <Ellipse Grid.Row="1" Width="20" Height="20" 
-                        Fill="Gray" Stroke="#000" StrokeThickness="1"
-                        IsHitTestVisible="False"
-                        Panel.ZIndex="-1"
-                        Cursor="Hand"/>
-
-                    <TextBlock Text="{Binding Name}" Foreground="Black" 
-                   HorizontalAlignment="Center" FontSize="9" Margin="0,2,0,0"/>
-                </Grid>
-            </Border>
-        </DataTemplate>
-
-        <DataTemplate x:Key="OutputPortTemplate">
-            <Border  Padding="3,2,3,2" Margin="1" Background="Black" CornerRadius="5">
-                <Grid Margin="1" Background="Black" ToolTip="{Binding Name}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <Ellipse Grid.Row="1" Width="15" Height="15" 
-                         Fill="LightGray" Stroke="White" StrokeThickness="2"
-                         Tag="{Binding}" 
-                         Cursor="Hand"/>
-                    <Ellipse Grid.Row="1" Width="20" Height="20" 
-                        Fill="Gray" Stroke="#000" StrokeThickness="1"
-                        IsHitTestVisible="False"
-                        Panel.ZIndex="-1"
-                        Cursor="Hand"/>
-
-                    <TextBlock  Text="{Binding Name}" Foreground="White" 
-                   HorizontalAlignment="Center" FontSize="9" Margin="0,2,0,0"/>
-                </Grid>
-            </Border>
-        </DataTemplate>
-
         <DataTemplate DataType="{x:Type vmM:OscillatorViewModel}">
-            <vM:OscillatorView />
+            <Grid>
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <vM:OscillatorView />
+            </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmM:MixerViewModel}">
-            <vM:MixerView />
+            <Grid>
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <vM:MixerView />
+            </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmM:AudioOutputViewModel}">
@@ -71,6 +38,14 @@
 
         <DataTemplate DataType="{x:Type vm:CableViewModel}">
             <v:CableView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmP:InputPortViewModel}">
+            <v:PortView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmP:OutputPortViewModel}">
+            <v:PortView />
         </DataTemplate>
     </Application.Resources>
 </Application>

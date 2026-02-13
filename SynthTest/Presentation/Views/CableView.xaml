@@ -5,13 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SynthTest.Presentation.Views"
              mc:Ignorable="d" 
+             IsHitTestVisible="False"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.ContextMenu>
-        <ContextMenu>
-            <MenuItem Header="Disconnect / Delete" Command="{Binding DeleteCommand}"/>
-        </ContextMenu>
-    </UserControl.ContextMenu>
-
     <Canvas>
         <Path Stroke="CornflowerBlue" StrokeThickness="3" IsHitTestVisible="True">
             <Path.ToolTip>

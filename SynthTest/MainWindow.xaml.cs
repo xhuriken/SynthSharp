@@ -2,6 +2,7 @@
 using SynthTest.Presentation.MainViewModel;
 using SynthTest.Presentation.ViewModels;
 using SynthTest.Presentation.ViewModels.Ports;
+using SynthTest.Presentation.Views;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,135 +43,73 @@ namespace SynthTest
             _vm.Rack.AddModule(ModuleType.Mixer);
         }
 
-
-        // DRAG START
         private void OnWindowMouseDown(object sender, MouseButtonEventArgs e)
         {
-            // Get element under mouse (could be the Ellipse, an TextBlock, a lot of WPF things)
-            var element = e.OriginalSource as FrameworkElement;
+            // KISS: We look for our custom control "PortView" in the visual tree
+            var portView = FindParent<PortView>(e.OriginalSource as DependencyObject);
 
-            Trace.WriteLine($"[MOUSE DOWN] Hit: {element?.GetType().Name} | DataContext: {element?.DataContext?.GetType().Name}");
-
-            // This element is an OutputPort ?
-            if (element?.DataContext is OutputPortViewModel outputPort)
+            if (portView != null && portView.DataContext is PortViewModel portVm)
             {
-                Trace.WriteLine($"[DRAG START] Output Port Found: {outputPort.Name}");
+                // CLEAN: We ask the view directly for the center coordinates
+                portVm.CenterPoint = portView.GetAnchorCenter(this);
 
-                _sourceDragPort = outputPort; // set it for later
-                _isDragging = true;
-
-                _startPoint = GetElementCenter(element);
-
-                // Visual.
-                // TODO: STOCK CENTER OF PORT AND USE IT HERE
-                DragLine.X1 = _startPoint.X;
-                DragLine.Y1 = _startPoint.Y;
-                DragLine.X2 = _startPoint.X;
-                DragLine.Y2 = _startPoint.Y;
-                DragLine.Visibility = Visibility.Visible;
+                Trace.WriteLine($"[DRAG START] Port clicked: {portVm.Name}");
+                _vm.Rack.StartDrag(portVm);
 
                 Mouse.Capture(this);
                 e.Handled = true;
             }
         }
 
-        // MOUVEMENT
         private void OnWindowMouseMove(object sender, MouseEventArgs e)
         {
-            if (_isDragging)
-            {
-                // Update the current cable line
-                Point currentPos = e.GetPosition(this);
-                DragLine.X2 = currentPos.X;
-                DragLine.Y2 = currentPos.Y;
-            }
+            _vm.Rack.UpdateDrag(e.GetPosition(this));
         }
 
-        // END OF DRAG
         private void OnWindowMouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (_isDragging)
+            PortViewModel targetPort = null;
+            Point mousePos = e.GetPosition(this);
+
+            // HitTest to find what is under the mouse
+            VisualTreeHelper.HitTest(this, null, new HitTestResultCallback(result =>
             {
-                e.Handled = true;
+                // We are looking for a PortView
+                var portView = FindParent<PortView>(result.VisualHit);
 
-                // Get Mouse Position
-                Point mousePos = e.GetPosition(this);
-
-
-                // [I DID NOT KNOW ABOUT THIS WPF FEATURE TODO: READ THE .NET DOC FOR THAT]
-                // HIT TEST
-                // We ask to the visual wpf tree "which things are under us ?"
-                InputPortViewModel foundInput = null;
-                Point targetCenter = mousePos; // at the init we put mouse pos, but we'll update it with output pos
-
-                VisualTreeHelper.HitTest(this, null, new HitTestResultCallback(result =>
+                if (portView != null && portView.DataContext is PortViewModel port)
                 {
-                    var elementFounded = result.VisualHit as FrameworkElement;
-
-                    // We check all element under mouse until is an InputPortViewModel (because it could be a TextBlock, an Ellipse, a Border, etc...
-                    while (elementFounded != null)
-                    {
-                        if (elementFounded.DataContext is InputPortViewModel inputVm)
-                        {
-                            foundInput = inputVm;
-                            targetCenter = GetElementCenter(elementFounded);
-                            return HitTestResultBehavior.Stop; // We FUCKING FOUND IT
-                        }
-                        // We go to the parent
-                        elementFounded = VisualTreeHelper.GetParent(elementFounded) as FrameworkElement;
-                    }
-
-                    // If is not an input, we continue to search
-                    return HitTestResultBehavior.Continue;
-                }), new PointHitTestParameters(mousePos));
-
-
-                // IS IT AN INPUT ?
-                if (foundInput != null)
-                {
-                    Trace.WriteLine($"[DRAG END] SUCCESS ! Input found : {foundInput.Name}");
-
-                    try
-                    {
-                        _vm.Rack.TryCreateCable(_sourceDragPort, foundInput, _startPoint, targetCenter);
-
-                        // WE DRAW AN UGLY LINE
-                        // (TODO: REPLACE IT WITH A REAL CABLE CONTROL)
-                        
-
-                        StopDragging();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine($"[ERROR SAMER] {ex.Message}");
-                        StopDragging();
-
-                    }
+                    targetPort = port;
+                    // CLEAN: Update center for perfect magnetic snap
+                    targetPort.CenterPoint = portView.GetAnchorCenter(this);
+                    return HitTestResultBehavior.Stop;
                 }
-                else
-                {
-                    Trace.WriteLine("[DRAG END] Missed (Nothing under the mouse)");
-                    StopDragging();
+                return HitTestResultBehavior.Continue;
+            }), new PointHitTestParameters(mousePos));
 
-                }
-            }
-        }
+            if (targetPort != null)
+                Trace.WriteLine($"[DRAG END] Target found: {targetPort.Name}");
+            else
+                Trace.WriteLine("[DRAG END] Dropped in void");
 
-        private void StopDragging()
-        {
-            _isDragging = false;
-            _sourceDragPort = null;
-            DragLine.Visibility = Visibility.Collapsed;
+            _vm.Rack.EndDrag(targetPort);
             Mouse.Capture(null);
-            Trace.WriteLine("[DRAG] Stopped");
         }
 
+        // =========================================================
+        //                 HELPERS
+        // =========================================================
 
-        private Point GetElementCenter(FrameworkElement element)
+        // Generic helper to find a parent of a specific type in the Visual Tree
+        // Much cleaner than checking DataContext manually
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
-            // Calcule le centre absolu par rapport à la fenêtre
-            return element.TranslatePoint(new Point(element.ActualWidth / 2, element.ActualHeight / 2), this);
+            while (child != null)
+            {
+                if (child is T parent) return parent;
+                child = VisualTreeHelper.GetParent(child);
+            }
+            return null;
         }
     }
 }

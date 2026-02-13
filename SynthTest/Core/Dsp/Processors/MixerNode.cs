@@ -10,20 +10,22 @@ namespace SynthTest.Core.Dsp.Processors
 {
     public class MixerNode : IAudioNode
     {
-        public IAudioNode Input1 { get; set; }
-        public IAudioNode Input2 { get; set; }
-        public IAudioNode Input3 { get; set; }
-        public IAudioNode Input4 { get; set; }
+        public AudioInput Input1 { get; } = new AudioInput();
+        public AudioInput Input2 { get; } = new AudioInput();
+        public AudioInput Input3 { get; } = new AudioInput();
+        public AudioInput Input4 { get; } = new AudioInput();
 
         private LinearRamp _ramp1 = new LinearRamp(0.05f);
         private LinearRamp _ramp2 = new LinearRamp(0.05f);
         private LinearRamp _ramp3 = new LinearRamp(0.05f);
         private LinearRamp _ramp4 = new LinearRamp(0.05f);
+        private LinearRamp _rampOut = new LinearRamp(0.05f);
 
         private float _vol1 = 1.0f;
         private float _vol2 = 1.0f;
         private float _vol3 = 1.0f;
         private float _vol4 = 1.0f;
+        private float _volOut = 1.0f;
 
         public float Vol1
         {
@@ -45,6 +47,11 @@ namespace SynthTest.Core.Dsp.Processors
             get => _vol4;
             set { _vol4 = value; _ramp4.Value = value; }
         }
+        public float VolOut
+        {
+            get => _volOut;
+            set { _volOut = value; _rampOut.Value = value; }
+        }
 
         private float[] _mixBuffer;
 
@@ -54,6 +61,7 @@ namespace SynthTest.Core.Dsp.Processors
             _ramp2.Value = _vol2;
             _ramp3.Value = _vol3;
             _ramp4.Value = _vol4;
+            _rampOut.Value = _volOut;
         }
 
         public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
@@ -66,6 +74,11 @@ namespace SynthTest.Core.Dsp.Processors
             MixInput(Input2, _ramp2, buffer, offset, count, context);
             MixInput(Input3, _ramp3, buffer, offset, count, context);
             MixInput(Input4, _ramp4, buffer, offset, count, context);
+
+            // Mix result with VolOut
+            for (int i = 0; i < count; i++) { 
+                buffer[offset + i] *= _rampOut.Next(); 
+            }
         }
 
         private void MixInput(IAudioNode input, LinearRamp volumeRamp, float[] outputBuffer, int offset, int count, AudioContext context)

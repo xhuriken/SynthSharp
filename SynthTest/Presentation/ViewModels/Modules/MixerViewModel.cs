@@ -22,14 +22,13 @@ namespace SynthTest.Presentation.ViewModels.Modules
             _node = node;
 
             // Input 1
-            Inputs.Add(new InputPortViewModel("IN 1", this, (source) => _node.Input1 = source));
+            Inputs.Add(new InputPortViewModel("IN 1", this, (src) => _node.Input1.AddSource(src), (src) => _node.Input1.RemoveSource(src) ));
             // Input 2
-            Inputs.Add(new InputPortViewModel("IN 2", this, (source) => _node.Input2 = source));
+            Inputs.Add(new InputPortViewModel("IN 2", this, (src) => _node.Input2.AddSource(src), (src) => _node.Input2.RemoveSource(src)));
             // Input 3
-            Inputs.Add(new InputPortViewModel("IN 3", this, (source) => _node.Input3 = source));
+            Inputs.Add(new InputPortViewModel("IN 3", this, (src) => _node.Input3.AddSource(src), (src) => _node.Input3.RemoveSource(src)));
             // Input 4
-            Inputs.Add(new InputPortViewModel("IN 4", this, (source) => _node.Input4 = source));
-
+            Inputs.Add(new InputPortViewModel("IN 4", this, (src) => _node.Input4.AddSource(src), (src) => _node.Input4.RemoveSource(src)));
 
             // Output (Le Mixer est lui-même un Node, donc c'est lui la source)
             Outputs.Add(new OutputPortViewModel("OUT", this, _node));
@@ -47,26 +46,39 @@ namespace SynthTest.Presentation.ViewModels.Modules
             }
         }
 
-        public float Vol2 { 
+        public float Vol2 
+        { 
             get => _node.Vol2; 
             set { 
                 _node.Vol2 = value; 
                 NotifyPropertyChanged(); 
             } 
         }
-        public float Vol3 { 
+        public float Vol3 
+        { 
             get => _node.Vol3; 
             set { 
                 _node.Vol3 = value; 
                 NotifyPropertyChanged(); 
             } 
         }
-        public float Vol4 { 
+        public float Vol4 
+        { 
             get => _node.Vol4; 
             set { 
                 _node.Vol4 = value; 
                 NotifyPropertyChanged(); 
             } 
+        }
+
+        public float VolOut
+        {
+            get => _node.VolOut;
+            set
+            {
+                _node.VolOut = value;
+                NotifyPropertyChanged();
+            }
         }
     }
 }

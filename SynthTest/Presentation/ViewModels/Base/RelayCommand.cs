@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 namespace SynthTest.Presentation.ViewModels.Base
 {
+    // NON-GENERIC VERSION (For simple actions like "Add VCO")
     public class RelayCommand : ICommand
     {
         private readonly Action _execute;
@@ -19,7 +20,38 @@ namespace SynthTest.Presentation.ViewModels.Base
         }
 
         public bool CanExecute(object parameter) => _canExecute == null || _canExecute();
+
         public void Execute(object parameter) => _execute();
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+    }
+
+    // GENERIC VERSION (For actions with params like "Delete Module X")
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly Action<T> _execute;
+        private readonly Predicate<T> _canExecute;
+
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null || _canExecute((T)parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T)parameter);
+        }
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }

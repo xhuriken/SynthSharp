@@ -30,12 +30,9 @@ namespace SynthTest.Presentation.MainViewModel
             var masterNode = new AudioOutputNode();
             var masterVm = new AudioOutputViewModel(masterNode);
 
-            // 2. On l'ajoute au Rack (pour qu'il s'affiche)
+            // Add the master output module in rack
             Rack.AddModule(masterVm);
-
-            // 3. C'EST ICI LE SECRET : On dit à NAudio "Ta source, c'est ce Node là"
-            // Tout le reste du son viendra de ce qui est branché dans ce MasterNode.
-            _audioEngine.InputNode = masterNode;
+            _audioEngine.InputNode = masterNode; // the audio engine will listen to the master output node
 
             // Enable our synthesizer dude !
             _audioEngine.Play();

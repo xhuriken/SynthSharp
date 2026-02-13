@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SynthTest.Presentation.ViewModels.Base
 {
@@ -21,6 +22,7 @@ namespace SynthTest.Presentation.ViewModels.Base
         // List for UI of the ports (itemsControl)
         public ObservableCollection<InputPortViewModel> Inputs { get; } = new();
         public ObservableCollection<OutputPortViewModel> Outputs { get; } = new();
+        public ICommand DeleteCommand { get; set; }
 
         // later we'll stock his position in the canvas
         // public double X { get; set; }
