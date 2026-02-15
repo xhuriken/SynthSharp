@@ -13,19 +13,19 @@ namespace SynthTest.Core.Dsp.Processors
         // Input of master
         public AudioInput Input = new AudioInput();
 
-        private float _vol = 0.05f;
         private LinearRamp _ramp = new LinearRamp(0.05f);
 
-        public AudioOutputNode() 
-        {
-            _ramp.Value = _vol;
-        }
-
+        private float _vol = 0.05f;
         public float Vol
         {
             get => _vol;
             set { _vol = value; _ramp.Value = value; }
         }
+        public AudioOutputNode()
+        {
+            _ramp.Value = _vol;
+        }
+
         public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
         {
             if (Input != null)

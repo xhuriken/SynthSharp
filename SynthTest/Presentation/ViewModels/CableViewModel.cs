@@ -12,7 +12,13 @@ namespace SynthTest.Presentation.ViewModels
 {
     public class CableViewModel : ViewModelBase
     {
+        /// <summary>
+        /// The source output port of the cable. This property holds a reference to the OutputPortViewModel that represents the starting point of the cable connection.
+        /// </summary>
         public OutputPortViewModel Source { get; set; }
+        /// <summary>
+        /// The destination input port of the cable. This property holds a reference to the InputPortViewModel that represents the endpoint of the cable connection.
+        /// </summary>
         public InputPortViewModel Destination { get; set; }
 
         private bool _isDragging;
@@ -40,7 +46,13 @@ namespace SynthTest.Presentation.ViewModels
         private Point _cp1; public Point ControlPoint1 { get => _cp1; set { _cp1 = value; NotifyPropertyChanged(); } }
         private Point _cp2; public Point ControlPoint2 { get => _cp2; set { _cp2 = value; NotifyPropertyChanged(); } }
 
+        /// <summary>
+        /// Delete Action Callback actually he execute RemoveCable from RackVM)
+        /// </summary>
         private readonly Action<CableViewModel> _deleteAction; // delete action callback
+        /// <summary>
+        /// ICommand for deleting the cable. When executed, it triggers the RequestDelete method, which in turn invokes the _deleteAction callback to request the deletion of this cable from the RackViewModel or any managing entity.
+        /// </summary>
         public ICommand DeleteCommand { get; }
 
         // CONSTRUCTOR FOR REAL CABLE

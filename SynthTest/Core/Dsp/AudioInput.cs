@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SynthTest.Core.Dsp
 {
     /// <summary>
-    /// Represent an audio input, he can recieve multiple sources and sum together.
+    /// Represent an audio input, he can recieve multiple sources and sum together. It's an funnel (multiple sound source -> one sound)
     /// </summary>
     public class AudioInput : IAudioNode
     {
@@ -17,11 +17,11 @@ namespace SynthTest.Core.Dsp
         /// </summary>
         private readonly List<IAudioNode> _sources = new List<IAudioNode>();
         // temp buffer to sum all the sources
-        private float[] _sumBuffer; 
+        private float[] _sumBuffer;
 
         // Add a source (when we plug cable in)
         /// <summary>
-        /// Add a new source to this input
+        /// Helper for add a new source to this input to proces
         /// </summary>
         /// <param name="node"></param>
         public void AddSource(IAudioNode node)
@@ -31,6 +31,10 @@ namespace SynthTest.Core.Dsp
         }
 
         // Remove a source (when we unplug cable)
+        /// <summary>
+        /// Helper for remove a source from this input to process
+        /// </summary>  
+        /// <param name="node"></param>
         public void RemoveSource(IAudioNode node)
         {
             if (_sources.Contains(node)) // Avoid removing a source that is not in the list
@@ -38,7 +42,7 @@ namespace SynthTest.Core.Dsp
         }
 
         /// <summary>
-        /// 
+        /// Sum all the sources connected to this input and fill the buffer with the result. If no source is connected, just clear the buffer for performance.
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="offset"></param>

@@ -10,7 +10,10 @@ namespace SynthTest.Presentation.ViewModels.Ports
 {
     public class OutputPortViewModel : PortViewModel
     {
-        // Dsp Node we'll distribute voltage
+        /// <summary>
+        /// The DSP node associated with this output port, representing the audio signal source that can be connected to input ports of other modules.<br />
+        /// TLDR : It's the sound of THAT node I'll distribute.
+        /// </summary>
         public IAudioNode Node { get; }
 
         public OutputPortViewModel(string name, ModuleViewModelBase parent, IAudioNode node) : base(name, PortType.Output, parent)

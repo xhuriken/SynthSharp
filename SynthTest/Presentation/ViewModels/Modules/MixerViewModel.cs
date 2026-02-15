@@ -36,7 +36,7 @@ namespace SynthTest.Presentation.ViewModels.Modules
             // Input 4
             Inputs.Add(new InputPortViewModel("IN 4", this, (src) => _node.Input4.AddSource(src), (src) => _node.Input4.RemoveSource(src)));
 
-            // Output (Le Mixer est lui-même un Node, donc c'est lui la source)
+            // Output (Mixer is a node, so it's him the source)
             Outputs.Add(new OutputPortViewModel("OUT", this, _node));
 
         }

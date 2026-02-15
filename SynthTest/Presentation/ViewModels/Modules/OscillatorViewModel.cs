@@ -22,11 +22,11 @@ namespace SynthTest.Presentation.ViewModels.Modules
         /// </summary>
         private readonly OscillatorNode _node;
         /// <summary>
-        /// 
+        /// Reference to his right IAudioNode (so OsclillatorNode)
         /// </summary>
         public override IAudioNode Node => _node;
         /// <summary>
-        /// 
+        /// The name of this module, displayed in the view.
         /// </summary>
         public override string Name => "VCO";
 
