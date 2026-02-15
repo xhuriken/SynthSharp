@@ -30,33 +30,6 @@
             </Style>
         </Border.Style>
 
-        <Border.ContextMenu>
-            <ContextMenu>
-                <ContextMenu.Resources>
-                    <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Header" Value="Disconnect Cable ❌"/>
-                        <Setter Property="Command" Value="{Binding DeleteCommand}"/>
-                        <Setter Property="Foreground" Value="DarkRed"/>
-                    </Style>
-                </ContextMenu.Resources>
-
-                <ContextMenu.ItemsSource>
-                    <CompositeCollection>
-
-                        <MenuItem Header="Create Cable" 
-                                  Foreground="Black"
-                                  Command="{Binding Data.StartCreateCableCommand, Source={StaticResource RackProxy}}"
-                                  CommandParameter="{Binding Data, Source={StaticResource PortProxy}}"/>
-
-                        <Separator/>
-
-                        <CollectionContainer Collection="{Binding Data.ConnectedCables, Source={StaticResource PortProxy}}"/>
-
-                    </CompositeCollection>
-                </ContextMenu.ItemsSource>
-            </ContextMenu>
-        </Border.ContextMenu>
-
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

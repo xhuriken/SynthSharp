@@ -9,9 +9,13 @@ namespace SynthTest.Core.Dsp.Synthesis
 {
     public class LinearRamp
     {
+        // current value who DSl will read
         private float _currentValue;
+        // the target value we want to reach with the ramp
         private float _targetValue;
+        // increment per sample to reach the target value in the specified ramp time
         private float _increment;
+        // how many samples are remaining to reach the target value
         private int _samplesRemaining;
         // Smoothing time
         private readonly float _rampTimeSeconds;
@@ -30,7 +34,7 @@ namespace SynthTest.Core.Dsp.Synthesis
 
                 _targetValue = value;
 
-                // SEULE DIFFÉRENCE : On prend le SampleRate du Config global
+                // On prend le SampleRate du Config global
                 _samplesRemaining = (int)(AudioConfig.SampleRate * _rampTimeSeconds);
 
                 if (_samplesRemaining > 0)

@@ -12,11 +12,18 @@ namespace SynthTest.Core.Dsp
     /// </summary>
     public class AudioInput : IAudioNode
     {
-        // List of all the nodes who are plugged in this input, we will sum them together in ProcessBlock
+        /// <summary>
+        /// List of all the nodes who are plugged in this input, we will sum them together in ProcessBlock
+        /// </summary>
         private readonly List<IAudioNode> _sources = new List<IAudioNode>();
-        private float[] _sumBuffer; // temp buffer to sum all the sources
+        // temp buffer to sum all the sources
+        private float[] _sumBuffer; 
 
         // Add a source (when we plug cable in)
+        /// <summary>
+        /// Add a new source to this input
+        /// </summary>
+        /// <param name="node"></param>
         public void AddSource(IAudioNode node)
         {
             if (!_sources.Contains(node)) // Avoid adding the same source multiple times
@@ -30,6 +37,13 @@ namespace SynthTest.Core.Dsp
                 _sources.Remove(node);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <param name="context"></param>
         public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
         {
             if (_sources.Count == 0) // if no source is connected, just clear the buffer and do nothing for performance
@@ -39,8 +53,6 @@ namespace SynthTest.Core.Dsp
             }
 
             EnsureBufferCapacity(count);
-
-            //Array.Clear(buffer, offset, count); // WARNING: survey this fucking line, he can cause troubleshooting
 
             // Sum all sources together
             foreach (var source in _sources)

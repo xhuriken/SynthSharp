@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SynthTest.Presentation.ViewModels.Base
 {
+    /// <summary>
+    /// Provides a base class for view models that implements property change notification.
+    /// </summary>
     public class ViewModelBase : INotifyPropertyChanged
     {
         // All models will implement that to notify (UI<->Code) the view when a property changes

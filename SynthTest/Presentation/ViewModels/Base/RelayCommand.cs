@@ -30,7 +30,7 @@ namespace SynthTest.Presentation.ViewModels.Base
         }
     }
 
-    // GENERIC VERSION (For actions with params like "Delete Module X")
+    // GENERIC VERSION (For actions with one params like "Delete Module X")
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;

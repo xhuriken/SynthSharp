@@ -11,10 +11,23 @@ using System.Xml.Linq;
 
 namespace SynthTest.Presentation.ViewModels.Modules
 {
+    /// <summary>
+    /// Represents the view model for a voltage-controlled oscillator (VCO) module, providing properties and
+    /// functionality to control oscillator parameters and expose them to the user interface.
+    /// </summary>
     public class OscillatorViewModel : ModuleViewModelBase
     {
+        /// <summary>
+        /// Reference to his right DSP node
+        /// </summary>
         private readonly OscillatorNode _node;
+        /// <summary>
+        /// 
+        /// </summary>
         public override IAudioNode Node => _node;
+        /// <summary>
+        /// 
+        /// </summary>
         public override string Name => "VCO";
 
         public OscillatorViewModel(OscillatorNode node)
@@ -24,6 +37,9 @@ namespace SynthTest.Presentation.ViewModels.Modules
             Outputs.Add(new OutputPortViewModel("OUT", this, _node));
         }
 
+        /// <summary>
+        /// Gets or sets the frequency value associated with the node.
+        /// </summary>
         public float Frequency
         {
             get => _node.Frequency;
@@ -37,6 +53,9 @@ namespace SynthTest.Presentation.ViewModels.Modules
             }
         }
 
+        /// <summary>
+        /// Gets or sets the currently selected oscillator type for this node.
+        /// </summary>
         public OscillatorType SelectedType
         {
             get => _node.Type;
@@ -50,7 +69,9 @@ namespace SynthTest.Presentation.ViewModels.Modules
             }
         }
 
-        // Util for fill the ComboBox in the view
+        /// <summary>
+        /// Gets an array containing all defined values of the OscillatorType enum. Used in view to populate the shape's combobox.
+        /// </summary>
         public Array OscillatorTypes => Enum.GetValues(typeof(OscillatorType));
     }
 }

@@ -81,6 +81,15 @@ namespace SynthTest.Core.Dsp.Processors
             }
         }
 
+        /// <summary>
+        /// Mix one input between other already added in the local buffer.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="volumeRamp"></param>
+        /// <param name="outputBuffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <param name="context"></param>
         private void MixInput(IAudioNode input, LinearRamp volumeRamp, float[] outputBuffer, int offset, int count, AudioContext context)
         {
             if (input == null) return;

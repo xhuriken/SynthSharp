@@ -50,7 +50,7 @@ namespace SynthTest.Presentation.ViewModels
             Destination = destination;
 
             _deleteAction = deleteAction;
-            DeleteCommand = new RelayCommand(Delete);
+            DeleteCommand = new RelayCommand(RequestDelete);
 
             // At the creation of his visual of the cable, we do the DSP connection !
             Destination.AddConnection(Source.Node);
@@ -63,6 +63,11 @@ namespace SynthTest.Presentation.ViewModels
             IsDragging = true;
         }
 
+        /// <summary>
+        /// Assign the position of the cables during the drag with the mouse position.
+        /// </summary>
+        /// <param name="mousePos">Given by the MainWindow -> RackVM -> us</param>
+        /// <remarks>He will automaticaly update the right side of the cable.</remarks>
         public void UpdateDrag(Point mousePos)
         {
             // If i have a source, its the end point who follow the mouse
@@ -79,9 +84,13 @@ namespace SynthTest.Presentation.ViewModels
             }
         }
 
+        /// <summary>
+        /// Updates the control points of the curve to create a sagging effect between the start and end points,
+        /// simulating gravity. (Beziers)
+        /// </summary>
         private void UpdateCurve()
         {
-            // GRAVITY (AI: TODO REMAKE IT)
+            // GRAVITY WITH BEZIER (AI: TODO REMAKE IT)
 
             // Calc distance
             double distance = Math.Sqrt(Math.Pow(EndPoint.X - StartPoint.X, 2) + Math.Pow(EndPoint.Y - StartPoint.Y, 2));
@@ -94,12 +103,23 @@ namespace SynthTest.Presentation.ViewModels
             ControlPoint2 = new Point(EndPoint.X, EndPoint.Y + sag);
         }
 
-        public void Delete()
+        /// <summary>
+        /// Disconnects the cable | AUDIO SIDE
+        /// </summary>
+        public void Disconnect()
         {
             if (Source != null && Destination != null)
-                Destination.RemoveConnection(Source.Node); // audio disconnection
+            {
+                Destination.RemoveConnection(Source.Node);
+            }
+        }
 
-            _deleteAction?.Invoke(this); // visual deletion
+        /// <summary>
+        /// Deletes the connection, removing any associated audio and visual links.
+        /// </summary>
+        public void RequestDelete()
+        {
+            _deleteAction?.Invoke(this); // Request the deletion to the RackViewModel
         }
     }
 }

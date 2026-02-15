@@ -13,7 +13,7 @@ namespace SynthTest.Core.Dsp.Processors
         // Input of master
         public AudioInput Input = new AudioInput();
 
-        private float _vol = 0.2f;
+        private float _vol = 0.05f;
         private LinearRamp _ramp = new LinearRamp(0.05f);
 
         public AudioOutputNode() 

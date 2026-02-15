@@ -22,7 +22,13 @@ namespace SynthTest.Presentation.ViewModels.Modules
             _node = node;
 
             // Input 1
-            Inputs.Add(new InputPortViewModel("IN 1", this, (src) => _node.Input1.AddSource(src), (src) => _node.Input1.RemoveSource(src) ));
+            Inputs.Add(
+                new InputPortViewModel("IN 1",
+                                       this, 
+                                       (src) => _node.Input1.AddSource(src), 
+                                       (src) => _node.Input1.RemoveSource(src) 
+                                       )
+                );
             // Input 2
             Inputs.Add(new InputPortViewModel("IN 2", this, (src) => _node.Input2.AddSource(src), (src) => _node.Input2.RemoveSource(src)));
             // Input 3

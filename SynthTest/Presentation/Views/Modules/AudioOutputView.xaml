@@ -17,7 +17,7 @@
             <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="#AAA" FontWeight="Bold" HorizontalAlignment="Center" Height="15"/>
 
             <TextBlock Grid.Row="1" Text="Speakers" Foreground="Gray" HorizontalAlignment="Center" FontSize="10"/>
-            <Slider Grid.Row="2" Orientation="Vertical" Value="{Binding Vol}" Maximum="1" HorizontalAlignment="Center" Height="100"/>
+            <Slider Grid.Row="2" Orientation="Vertical" Value="{Binding Vol}" Maximum="0.5" HorizontalAlignment="Center" Height="100"/>
 
             <ItemsControl Grid.Row="3" ItemsSource="{Binding Inputs}" HorizontalAlignment="Center" Height="45">
                 <!--<ItemsControl.ItemsPanel>
