@@ -2,13 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:infra="clr-namespace:SynthTest.Infrastructure"
+        xmlns:vMenu="clr-namespace:SynthTest.Presentation.Views.Menus"
         Title="BBC Rack" Height="600" Width="1000" Background="#1E1E1E"
         MouseLeftButtonDown="OnWindowMouseDown"
         MouseLeftButtonUp="OnWindowMouseUp"
         MouseMove="OnWindowMouseMove">
 
     <Grid Background="Transparent">
-        <Grid.ContextMenu>
+        <!--<Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Add VCO" 
                           Command="{Binding Rack.AddModuleCommand}" 
@@ -18,7 +19,7 @@
                           Command="{Binding Rack.AddModuleCommand}" 
                           CommandParameter="{x:Static infra:ModuleType.Mixer}"/>
             </ContextMenu>
-        </Grid.ContextMenu>
+        </Grid.ContextMenu>-->
 
         <ItemsControl ItemsSource="{Binding Rack.Modules}">
             <ItemsControl.ItemsPanel>
@@ -34,11 +35,18 @@
                     <Canvas/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-
         </ItemsControl>
 
         <Canvas x:Name="DragLayer" IsHitTestVisible="False">
             <Line x:Name="DragLine" Stroke="White" StrokeThickness="2" StrokeDashArray="2 2" Visibility="Collapsed"/>
         </Canvas>
+
+        <Popup x:Name="MenuPopup" 
+               StaysOpen="False" 
+               Placement="MousePoint" 
+               AllowsTransparency="True" 
+               PopupAnimation="Scroll">
+            <vMenu:CustomMenuView Button.Click="OnMenuCheckItemClick"/>
+        </Popup>
     </Grid>
 </Window>

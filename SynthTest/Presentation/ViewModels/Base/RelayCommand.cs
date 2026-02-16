@@ -44,11 +44,17 @@ namespace SynthTest.Presentation.ViewModels.Base
 
         public bool CanExecute(object parameter)
         {
+            if (parameter == null && typeof(T).IsValueType)
+                return true;
+
             return _canExecute == null || _canExecute((T)parameter);
         }
 
         public void Execute(object parameter)
         {
+            if (parameter == null && typeof(T).IsValueType)
+                return;
+
             _execute((T)parameter);
         }
 

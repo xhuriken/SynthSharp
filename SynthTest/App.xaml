@@ -12,22 +12,22 @@
 
         <DataTemplate DataType="{x:Type vmM:OscillatorViewModel}">
             <Grid>
-                <Grid.ContextMenu>
+                <!--<Grid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
                     </ContextMenu>
-                </Grid.ContextMenu>
+                </Grid.ContextMenu>-->
                 <vM:OscillatorView />
             </Grid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmM:MixerViewModel}">
             <Grid>
-                <Grid.ContextMenu>
+                <!--<Grid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
                     </ContextMenu>
-                </Grid.ContextMenu>
+                </Grid.ContextMenu>-->
                 <vM:MixerView />
             </Grid>
         </DataTemplate>

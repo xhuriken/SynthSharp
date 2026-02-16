@@ -4,15 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SynthTest.Presentation.Views"
-             xmlns:tools="clr-namespace:SynthTest.Presentation.Views.Tools"
              xmlns:vm="clr-namespace:SynthTest.Presentation.ViewModels.Ports"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
 
-    <UserControl.Resources>
-        <tools:BindingProxy x:Key="PortProxy" Data="{Binding}" />
-        <tools:BindingProxy x:Key="RackProxy" Data="{Binding DataContext.Rack, RelativeSource={RelativeSource AncestorType=Window}}" />
-    </UserControl.Resources>
+
 
     <Border x:Name="MainBorder" Padding="3,2,3,2" Margin="1" CornerRadius="5" ToolTip="{Binding Name}">
 

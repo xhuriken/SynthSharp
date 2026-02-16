@@ -26,6 +26,7 @@
     <Folder Include="Infrastructure\Midi\" />
     <Folder Include="Presentation\Styles\" />
     <Folder Include="Presentation\Converters\" />
+    <Folder Include="Presentation\Views\Tools\" />
   </ItemGroup>
 
 </Project>
