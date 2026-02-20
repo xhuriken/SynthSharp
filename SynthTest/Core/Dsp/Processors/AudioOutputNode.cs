@@ -19,7 +19,10 @@ namespace SynthTest.Core.Dsp.Processors
         public float Vol
         {
             get => _vol;
-            set { _vol = value; _ramp.Value = value; }
+            set { 
+                _vol = value; 
+                _ramp.Value = value; 
+            }
         }
         public AudioOutputNode()
         {

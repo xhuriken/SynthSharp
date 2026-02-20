@@ -11,25 +11,15 @@
     <Application.Resources>
 
         <DataTemplate DataType="{x:Type vmM:OscillatorViewModel}">
-            <Grid>
-                <!--<Grid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
-                    </ContextMenu>
-                </Grid.ContextMenu>-->
-                <vM:OscillatorView />
-            </Grid>
+            <vM:OscillatorView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmM:MixerViewModel}">
-            <Grid>
-                <!--<Grid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Delete Module" Command="{Binding DeleteCommand}"/>
-                    </ContextMenu>
-                </Grid.ContextMenu>-->
-                <vM:MixerView />
-            </Grid>
+            <vM:MixerView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vmM:ControlledAmplifierViewModel}">
+            <vM:ControlledAmplifierView />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type vmM:AudioOutputViewModel}">

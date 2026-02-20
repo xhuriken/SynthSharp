@@ -138,6 +138,7 @@ namespace SynthTest
             {
                 MenuItemViewModel.Action("Add VCO", _vm.Rack.AddModuleCommand, ModuleType.VCO),
                 MenuItemViewModel.Action("Add Mixer", _vm.Rack.AddModuleCommand, ModuleType.Mixer),
+                MenuItemViewModel.Action("Add VCA", _vm.Rack.AddModuleCommand, ModuleType.VCA),
                 // Add more global actions here later like "fuck your mom" button biaatch
             };
         }

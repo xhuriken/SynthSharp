@@ -5,6 +5,7 @@ using SynthTest.Presentation.ViewModels.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,8 @@ namespace SynthTest.Infrastructure
     public enum ModuleType
     {
         VCO,
-        Mixer
+        Mixer,
+        VCA
     }
 
     /// <summary>
@@ -39,6 +41,10 @@ namespace SynthTest.Infrastructure
                 case ModuleType.Mixer:
                     var mixerNode = new MixerNode();
                     return new MixerViewModel(mixerNode);
+
+                case ModuleType.VCA:
+                    var vcaNode = new ControlledAmplifierNode();
+                    return new ControlledAmplifierViewModel(vcaNode);
 
                 default:
                     throw new ArgumentException("Unknown your fucking module type");
