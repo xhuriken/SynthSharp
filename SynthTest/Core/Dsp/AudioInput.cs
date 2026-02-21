@@ -15,7 +15,14 @@ namespace SynthTest.Core.Dsp
         /// <summary>
         /// List of all the nodes who are plugged in this input, we will sum them together in ProcessBlock
         /// </summary>
-        private readonly List<IAudioNode> _sources = new List<IAudioNode>();
+        private readonly List<IAudioNode> _sourcesList = new List<IAudioNode>();
+
+        /// <summary>
+        /// Array with fix size than will read the DSP (ITS FOR AVOID THREAD EATING EACH OTHER)
+        /// </summary>
+        private IAudioNode[] _sourcesArray = Array.Empty<IAudioNode>();
+
+
         // temp buffer to sum all the sources
         private float[] _sumBuffer;
 
@@ -26,8 +33,11 @@ namespace SynthTest.Core.Dsp
         /// <param name="node"></param>
         public void AddSource(IAudioNode node)
         {
-            if (!_sources.Contains(node)) // Avoid adding the same source multiple times
-                _sources.Add(node);
+            if (!_sourcesList.Contains(node)) // Avoid adding the same source multiple times
+            {
+                _sourcesList.Add(node);
+                _sourcesArray = _sourcesList.ToArray(); // Copy the List in Array
+            }
         }
 
         // Remove a source (when we unplug cable)
@@ -37,8 +47,11 @@ namespace SynthTest.Core.Dsp
         /// <param name="node"></param>
         public void RemoveSource(IAudioNode node)
         {
-            if (_sources.Contains(node)) // Avoid removing a source that is not in the list
-                _sources.Remove(node);
+            if (_sourcesList.Contains(node)) // Avoid removing a source that is not in the list
+            {
+                _sourcesList.Remove(node);
+                _sourcesArray = _sourcesList.ToArray();
+            }
         }
 
         /// <summary>
@@ -50,7 +63,9 @@ namespace SynthTest.Core.Dsp
         /// <param name="context"></param>
         public void ProcessBlock(float[] buffer, int offset, int count, AudioContext context)
         {
-            if (_sources.Count == 0) // if no source is connected, just clear the buffer and do nothing for performance
+            var currentSources = _sourcesArray;
+
+            if (currentSources.Length == 0) // if no source is connected, just clear the buffer and do nothing for performance
             {
                 Array.Clear(buffer, offset, count);
                 return;
@@ -59,8 +74,10 @@ namespace SynthTest.Core.Dsp
             EnsureBufferCapacity(count);
 
             // Sum all sources together
-            foreach (var source in _sources)
+            for (int s = 0; s < currentSources.Length; s++)
             {
+                var source = currentSources[s];
+
                 Array.Clear(_sumBuffer, 0, count); // clean temp buff
 
                 // Fill temp buff with source signal

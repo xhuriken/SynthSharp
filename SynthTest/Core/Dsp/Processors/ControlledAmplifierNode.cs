@@ -46,13 +46,13 @@ namespace SynthTest.Core.Dsp.Processors
             InputAudio.ProcessBlock(_audioBuffer, offset, count, context);
 
             Array.Clear(_cvBuffer, 0, count);
-            InputAudio.ProcessBlock(_cvBuffer, offset, count, context);
+            InputCv.ProcessBlock(_cvBuffer, offset, count, context);
 
             for (int i = 0; i < count; i++)
             {
                 float baseGain = _rampLevel.Next();
                 float gain = baseGain + _cvBuffer[i];
-
+                if (gain < 0f) gain = 0f;
                 buffer[offset + i] = _audioBuffer[i] * gain;
             }
         }
@@ -64,8 +64,10 @@ namespace SynthTest.Core.Dsp.Processors
         private void EnsureBufferCapacity(int count)
         {
             if (_audioBuffer == null || _audioBuffer.Length < count)
+            {
                 _audioBuffer = new float[count];
                 _cvBuffer = new float[count];
+            }
         }
     }
 }

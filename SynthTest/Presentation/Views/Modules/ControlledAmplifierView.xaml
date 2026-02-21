@@ -15,7 +15,7 @@
 
             <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="#AAA" FontWeight="Bold" HorizontalAlignment="Center" Height="15"/>
 
-            <Slider Grid.Row="1" Orientation="Vertical" Value="{Binding Level}" Maximum="0.5" HorizontalAlignment="Center" Height="80"/>
+            <Slider Grid.Row="1" Orientation="Vertical" Value="{Binding Level}" Maximum="1" HorizontalAlignment="Center" Height="80"/>
 
             <Grid Grid.Row="2" Height="45">
                 <Grid.ColumnDefinitions>
