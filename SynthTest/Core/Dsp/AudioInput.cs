@@ -22,6 +22,10 @@ namespace SynthTest.Core.Dsp
         /// </summary>
         private IAudioNode[] _sourcesArray = Array.Empty<IAudioNode>();
 
+        /// <summary>
+        /// Returns true if at least one audio source is connected to this input. (For the VCA for now, but maybe other module later)
+        /// </summary>
+        public bool IsConnected => _sourcesArray.Length > 0;
 
         // temp buffer to sum all the sources
         private float[] _sumBuffer;

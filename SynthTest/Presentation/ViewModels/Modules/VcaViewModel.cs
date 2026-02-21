@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace SynthTest.Presentation.ViewModels.Modules
 {
-    public class ControlledAmplifierViewModel : ModuleViewModelBase
+    public class VcaViewModel : ModuleViewModelBase
     {
-        private readonly ControlledAmplifierNode _node;
+        private readonly VcaNode _node;
         public override IAudioNode Node => _node;
         public override string Name => "VCA";
         public float Level
@@ -24,7 +24,7 @@ namespace SynthTest.Presentation.ViewModels.Modules
                 NotifyPropertyChanged();
             }
         }
-        public ControlledAmplifierViewModel(ControlledAmplifierNode node)
+        public VcaViewModel(VcaNode node)
         {
             _node = node;
 

@@ -18,13 +18,21 @@
             <vM:MixerView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vmM:ControlledAmplifierViewModel}">
+        <DataTemplate DataType="{x:Type vmM:VcaViewModel}">
             <vM:ControlledAmplifierView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vmM:AdsrViewModel}">
+            <vM:AdsrView />
+        </DataTemplate>
+
+        
         <DataTemplate DataType="{x:Type vmM:AudioOutputViewModel}">
             <vM:AudioOutputView />
         </DataTemplate>
+        
+        
+        
 
         <DataTemplate DataType="{x:Type vm:CableViewModel}">
             <v:CableView />

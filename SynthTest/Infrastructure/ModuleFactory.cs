@@ -19,7 +19,8 @@ namespace SynthTest.Infrastructure
     {
         VCO,
         Mixer,
-        VCA
+        VCA,
+        ADSR
     }
 
     /// <summary>
@@ -43,8 +44,11 @@ namespace SynthTest.Infrastructure
                     return new MixerViewModel(mixerNode);
 
                 case ModuleType.VCA:
-                    var vcaNode = new ControlledAmplifierNode();
-                    return new ControlledAmplifierViewModel(vcaNode);
+                    var vcaNode = new VcaNode();
+                    return new VcaViewModel(vcaNode);
+                case ModuleType.ADSR:
+                    var adsrNode = new AdsrNode();
+                    return new AdsrViewModel(adsrNode);
 
                 default:
                     throw new ArgumentException("Unknown your fucking module type");

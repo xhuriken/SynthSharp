@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SynthTest.Core.Dsp.Processors
 {
-    public class ControlledAmplifierNode : IAudioNode
+    public class VcaNode : IAudioNode
     {
         /// <summary>
         /// this is the input of the sound who are generate
@@ -20,16 +20,14 @@ namespace SynthTest.Core.Dsp.Processors
         public AudioInput InputCv { get; } = new AudioInput();
 
         private LinearRamp _rampLevel = new LinearRamp(0.05f);
-
         private float _level = 1.0f;
-
         public float Level
         {
             get => _level;
             set { _level = value; _rampLevel.Value = value; }
         }
 
-        public ControlledAmplifierNode()
+        public VcaNode()
         {
             _rampLevel.Value = _level;
         }
@@ -48,11 +46,17 @@ namespace SynthTest.Core.Dsp.Processors
             Array.Clear(_cvBuffer, 0, count);
             InputCv.ProcessBlock(_cvBuffer, offset, count, context);
 
+            bool isCvConnected = InputCv.IsConnected;
+
             for (int i = 0; i < count; i++)
             {
-                float baseGain = _rampLevel.Next();
-                float gain = baseGain + _cvBuffer[i];
-                if (gain < 0f) gain = 0f;
+                float knobLevel = _rampLevel.Next();
+
+                // if something is connected to the CV input, we take him. else, we set to 1
+                float cvValue = isCvConnected ? _cvBuffer[i] : 1.0f;
+
+                float gain = knobLevel * cvValue;
+                if (gain < 0f) gain = 0f; // in theorie, this will never happen, but, its industrial security !
                 buffer[offset + i] = _audioBuffer[i] * gain;
             }
         }
